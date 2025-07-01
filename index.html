@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formulario API - NicaPages</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0B1120;
+      --surface: #1e293b;
+      --primary: #38BDF8;
+      --text: #e2e8f0;
+      --secondary: #94a3b8;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden; /* Prevent horizontal scroll */
+      position: relative;
+    }
+    h1, h2, h3 {
+      color: var(--primary);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    .hero {
+      background: linear-gradient(180deg, var(--bg) 0%, #0f172a 100%);
+      padding: 80px 20px;
+      text-align: center;
+      animation: fadeIn 1.2s ease-in-out;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 5px solid var(--primary);
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .section {
+      padding: 60px 20px;
+      background-color: var(--surface);
+      border-radius: 10px;
+      margin: 20px 0;
+      transition: transform 0.3s;
+    }
+    .section:hover {
+      transform: scale(1.02);
+    }
+    .code-box {
+      background: var(--bg);
+      color: var(--primary);
+      padding: 15px;
+      border-radius: 10px;
+      font-family: monospace;
+      overflow-x: auto;
+      transition: box-shadow 0.3s;
+    }
+    .code-box:hover {
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+    footer {
+      background: #0f172a;
+      color: var(--secondary);
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      border-top: 1px solid var(--primary);
+      transition: background-color 0.3s;
+    }
+    footer:hover {
+      background: var(--primary);
+      color: var(--bg);
+    }
+    .btn-nica {
+      background-color: var(--primary);
+      color: var(--bg);
+      border: none;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .btn-nica:hover {
+      background-color: #0ea5e9;
+      transform: scale(1.05);
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    .codepen-simulator {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    @media(min-width: 768px) {
+      .codepen-simulator {
+        flex-direction: row;
+      }
+    }
+    .editor, .preview {
+      flex: 1;
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+      height: 600px; /* Aumentar la altura para evitar scroll */
+    }
+    .editor-header, .preview-header {
+      background: var(--bg);
+      padding: 10px 15px;
+      font-weight: 600;
+      color: var(--primary);
+      border-bottom: 1px solid #1e293b;
+    }
+    textarea {
+      flex: 1;
+      background: transparent;
+      color: var(--primary);
+      border: none;
+      padding: 15px;
+      resize: none;
+      outline: none;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    iframe {
+      flex: 1;
+      background: white;
+      border: none;
+    }
+    /* Background animation */
+    .background-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://www.transparenttextures.com/patterns/asfalt.png');
+      animation: moveBackground 10s linear infinite;
+      z-index: -1;
+    }
+    @keyframes moveBackground {
+      0% { background-position: 0 0; }
+      100% { background-position: 100% 0; }
+    }
+    /* New header image */
+    .header-image {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: auto;
+      opacity: 0.1; /* Slightly transparent */
+      z-index: -1; /* Behind the text */
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="background-animation"></div>
+
+  <header class="hero fade-in">
+    <img src="https://miro.medium.com/v2/resize:fit:1400/1*fNYR_qApiq8wPbDxQvar2Q.png" alt="Header Background" class="header-image">
+    <h1>Integración de Formulario API</h1>
+    <p>API gratuita creada por <strong>NicaPages</strong> para enviar formularios directamente a tu correo, con soporte para archivos (.doc, .pdf, imágenes).</p>
+    <p><b>100 peticiones diarias</b> y <b>3000 al mes</b> — Ideal para formularios web simples y profesionales.</p>
+  </header>
+
+  <section class="section fade-in">
+    <div class="container">
+      <h2 class="mb-4">🔗 Ruta POST de la API</h2>
+      <div class="code-box mb-4">
+        <button class="btn btn-primary" onclick="copyToClipboard('https://forms-nicpages.vercel.app/submit-form')">Copiar Ruta API</button>
+        <p class="mt-2">POST <span id="api-url">https://forms-nicpages.vercel.app/submit-form</span></p>
+      </div>
+      <p>Envía tus datos a esta ruta utilizando HTML, React, JavaScript o cualquier tecnología que soporte formularios POST.</p>
+    </div>
+  </section>
+
+  <section class="section fade-in">
+    <div class="container">
+      <h2 class="mb-4">📄 Variables obligatorias</h2>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item bg-transparent text-light">
+          <b>to</b>: Email destinatario (obligatorio)
+        </li>
+        <li class="list-group-item bg-transparent text-light">
+          <b>redirect_to</b>: URL a la que redirige después del envío (opcional)
+        </li>
+        <li class="list-group-item bg-transparent text-light">
+          <b>Otros campos</b>: Nombre, mensaje, teléfono, ciudad, etc.
+        </li>
+        <li class="list-group-item bg-transparent text-light">
+          <b>files</b>: Archivos adjuntos (opcional, .doc, .pdf, imágenes)
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section fade-in">
+    <div class="container">
+      <h2 class="mb-4">📱 Ejemplo de Integración en React</h2>
+      <p>Para redirigir a tu correo, solo cambia el correo del formulario de ejemplo:</p>
+      <div class="code-box">
+        <pre>
+          <code>
+import React, { useState } from 'react';
+
+const FormularioAPI = () => {
+  const [formData, setFormData] = useState({
+    to: 'tucorreo@dominio.com', // Cambia esto por tu correo
+    name: '',
+    email: '',
+    message: '',
+    files: null,
+  });
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    setFormData({
+      ...formData,
+      [name]: files ? files : value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = new FormData();
+    for (const key in formData) {
+      form.append(key, formData[key]);
+    }
+
+    const response = await fetch('https://forms-nicpages.vercel.app/submit-form', {
+      method: 'POST',
+      body: form,
+    });
+
+    if (response.ok) {
+      alert('Formulario enviado con éxito');
+    } else {
+      alert('Error al enviar el formulario');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} encType="multipart/form-data">
+      <input type="hidden" name="to" value={formData.to} />
+      <input type="text" name="name" placeholder="Nombre" onChange={handleChange} required />
+      <input type="email" name="email" placeholder="Correo" onChange={handleChange} required />
+      <textarea name="message" placeholder="Tu mensaje" onChange={handleChange}></textarea>
+      <input type="file" name="files" onChange={handleChange} multiple />
+      <button type="submit">Enviar</button>
+    </form>
+          </code>
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="section fade-in">
+    <div class="container">
+      <h2 class="mb-4">💻 Ejemplo en HTML</h2>
+      <div class="code-box">
+        <button class="btn btn-primary" onclick="copyToClipboard('&lt;form action=&quot;https://forms-nicpages.vercel.app/submit-form&quot; method=&quot;POST&quot; enctype=&quot;multipart/form-data&quot;&gt;&lt;input type=&quot;hidden&quot; name=&quot;to&quot; value=&quot;tucorreo@dominio.com&quot;&gt;&lt;br/&gt;&lt;input type=&quot;text&quot; name=&quot;name&quot; placeholder=&quot;Nombre&quot;&gt;&lt;br/&gt;&lt;input type=&quot;email&quot; name=&quot;email&quot; placeholder=&quot;Correo&quot;&gt;&lt;br/&gt;&lt;textarea name=&quot;message&quot;&gt;&lt;/textarea&gt;&lt;br/&gt;&lt;input type=&quot;file&quot; name=&quot;files&quot; multiple&gt;&lt;br/&gt;&lt;button type=&quot;submit&quot;&gt;Enviar&lt;/button&gt;&lt;br/&gt;&lt;/form&gt;')">Copiar Código HTML</button>
+        <pre>
+          <code>
+&lt;form action="https://forms-nicpages.vercel.app/submit-form" method="POST" enctype="multipart/form-data"&gt;<br/>
+&nbsp;&nbsp;&lt;input type="hidden" name="to" value="tucorreo@dominio.com"&gt;<br/>
+&nbsp;&nbsp;&lt;input type="text" name="name" placeholder="Nombre"&gt;<br/>
+&nbsp;&nbsp;&lt;input type="email" name="email" placeholder="Correo"&gt;<br/>
+&nbsp;&nbsp;&lt;textarea name="message"&gt;&lt;/textarea&gt;<br/>
+&nbsp;&nbsp;&lt;input type="file" name="files" multiple&gt;<br/>
+&nbsp;&nbsp;&lt;button type="submit"&gt;Enviar&lt;/button&gt;<br/>
+&lt;/form&gt;
+          </code>
+        </pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="section fade-in">
+    <div class="container">
+      <h2 class="mb-4">🚀 Consola Interactiva en Vivo</h2>
+      <div class="codepen-simulator">
+        <div class="editor">
+          <div class="editor-header">Editor HTML</div>
+          <textarea id="code" rows="15">
+<form action="https://forms-nicpages.vercel.app/submit-form" method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="to" value="tucorreo@dominio.com">
+  <input type="text" name="name" placeholder="Nombre" required>
+  <input type="email" name="email" placeholder="Correo" required>
+  <textarea name="message" placeholder="Tu mensaje"></textarea>
+  <input type="file" name="files" multiple>
+  <button type="submit">Enviar</button>
+</form>
+          </textarea>
+        </div>
+        <div class="preview">
+          <div class="preview-header">Vista previa</div>
+          <iframe id="preview"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Desarrollado por <a href="https://nicapages.site" class="text-info">NicaPages</a> — Todos los derechos reservados</p>
+  </footer>
+
+<script>
+  const textarea = document.getElementById('code');
+  const preview = document.getElementById('preview');
+
+  function updatePreview() {
+    const content = textarea.value;
+    preview.srcdoc = content;
+  }
+
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Texto copiado al portapapeles');
+    }, (err) => {
+      console.error('Error al copiar: ', err);
+    });
+  }
+
+  textarea.addEventListener('input', updatePreview);
+  window.addEventListener('DOMContentLoaded', updatePreview);
+</script>
+
+</body>
+</html>
