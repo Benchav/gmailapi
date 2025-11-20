@@ -3,340 +3,520 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Formulario API - NicaPages</title>
+  <title>Form API Documentation | Joshua Chávez</title>
+  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
     :root {
-      --bg: #0B1120;
-      --surface: #1e293b;
-      --primary: #38BDF8;
-      --text: #e2e8f0;
+      --bg-dark: #020617;
+      --bg-card: rgba(30, 41, 59, 0.4);
+      --primary: #38bdf8; /* Sky Blue */
+      --accent: #818cf8; /* Indigo */
       --secondary: #94a3b8;
+      --text: #f8fafc;
+      --success: #22c55e;
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glow: 0 0 20px rgba(56, 189, 248, 0.15);
     }
+
+    /* --- Global Reset & Base --- */
     body {
-      background-color: var(--bg);
+      background-color: var(--bg-dark);
       color: var(--text);
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden; /* Prevent horizontal scroll */
-      position: relative;
+      font-family: 'Outfit', sans-serif;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(129, 140, 248, 0.08), transparent 25%);
     }
-    h1, h2, h3 {
-      color: var(--primary);
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+
+    /* Scrollbar Personalizado */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+    h1, h2, h3 { font-weight: 800; letter-spacing: -0.5px; }
+    
+    /* --- Efecto Glassmorphism --- */
+    .glass-panel {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
     }
+
+    /* --- Header Hero --- */
     .hero {
-      background: linear-gradient(180deg, var(--bg) 0%, #0f172a 100%);
-      padding: 80px 20px;
+      padding: 100px 20px 60px;
       text-align: center;
-      animation: fadeIn 1.2s ease-in-out;
       position: relative;
-      overflow: hidden;
-      border-bottom: 5px solid var(--primary);
     }
+    
+    .badge-dev {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--primary);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      display: inline-block;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
     .hero h1 {
       font-size: 3.5rem;
-      font-weight: 800;
+      background: linear-gradient(to right, #fff, #bae6fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       margin-bottom: 20px;
     }
+
     .hero p {
       font-size: 1.2rem;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .section {
-      padding: 60px 20px;
-      background-color: var(--surface);
-      border-radius: 10px;
-      margin: 20px 0;
-      transition: transform 0.3s;
-    }
-    .section:hover {
-      transform: scale(1.02);
-    }
-    .code-box {
-      background: var(--bg);
-      color: var(--primary);
-      padding: 15px;
-      border-radius: 10px;
-      font-family: monospace;
-      overflow-x: auto;
-      transition: box-shadow 0.3s;
-    }
-    .code-box:hover {
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-    }
-    footer {
-      background: #0f172a;
       color: var(--secondary);
-      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* --- Code Windows (Terminal Style) --- */
+    .code-window {
+      background: #0f172a;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+      margin-top: 20px;
+    }
+
+    .window-header {
+      background: #1e293b;
+      padding: 12px 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .red { background: #ef4444; }
+    .yellow { background: #f59e0b; }
+    .green { background: #22c55e; }
+    .window-title {
+      margin-left: 10px;
+      font-size: 0.85rem;
+      color: var(--secondary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .code-content {
       padding: 20px;
-      margin-top: 40px;
-      border-top: 1px solid var(--primary);
-      transition: background-color 0.3s;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+      line-height: 1.5;
     }
-    footer:hover {
-      background: var(--primary);
-      color: var(--bg);
+    
+    /* Syntax Highlighting Simulado */
+    .tag { color: #38bdf8; }
+    .attr { color: #a5b4fc; }
+    .str { color: #86efac; }
+    .kwd { color: #f472b6; }
+    .comment { color: #64748b; font-style: italic; }
+
+    /* --- Cards Grid for Variables --- */
+    .var-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
     }
-    .btn-nica {
-      background-color: var(--primary);
-      color: var(--bg);
+
+    .var-card {
+      background: rgba(30, 41, 59, 0.3);
+      border: 1px solid var(--glass-border);
+      padding: 20px;
+      border-radius: 12px;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+
+    .var-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      background: rgba(30, 41, 59, 0.6);
+    }
+
+    .var-name {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    /* --- Buttons --- */
+    .btn-glow {
+      background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
+      color: white;
       border: none;
-      transition: background-color 0.3s, transform 0.3s;
+      padding: 10px 25px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
     }
-    .btn-nica:hover {
-      background-color: #0ea5e9;
-      transform: scale(1.05);
+
+    .btn-glow:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5);
+      color: white;
     }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
+
+    .btn-copy {
+      background: rgba(255,255,255,0.1);
+      color: var(--secondary);
+      border: 1px solid var(--glass-border);
+      font-size: 0.8rem;
+      padding: 5px 12px;
+      border-radius: 6px;
+      transition: 0.2s;
     }
-    .codepen-simulator {
+    .btn-copy:hover {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* --- Live Editor --- */
+    .editor-container {
       display: flex;
       flex-direction: column;
       gap: 20px;
+      height: 600px;
     }
-    @media(min-width: 768px) {
-      .codepen-simulator {
-        flex-direction: row;
-      }
+    
+    @media(min-width: 992px) {
+      .editor-container { flex-direction: row; }
     }
-    .editor, .preview {
+
+    .editor-pane, .preview-pane {
       flex: 1;
-      background: var(--surface);
-      border-radius: 12px;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-      height: 600px; /* Aumentar la altura para evitar scroll */
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
     }
-    .editor-header, .preview-header {
-      background: var(--bg);
-      padding: 10px 15px;
+
+    .pane-header {
+      background: #1e293b;
+      padding: 10px 20px;
       font-weight: 600;
-      color: var(--primary);
-      border-bottom: 1px solid #1e293b;
+      font-size: 0.9rem;
+      border-bottom: 1px solid #334155;
+      color: var(--secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    textarea {
+
+    textarea#code {
       flex: 1;
-      background: transparent;
-      color: var(--primary);
+      background: #0f172a;
+      color: #e2e8f0;
       border: none;
-      padding: 15px;
+      padding: 20px;
+      font-family: 'JetBrains Mono', monospace;
       resize: none;
       outline: none;
-      font-family: monospace;
       font-size: 14px;
+      line-height: 1.6;
     }
-    iframe {
+
+    iframe#preview {
       flex: 1;
-      background: white;
+      background: #fff; /* Preview needs white bg generally */
       border: none;
     }
-    /* Background animation */
-    .background-animation {
+
+    /* --- Footer --- */
+    footer {
+      border-top: 1px solid var(--glass-border);
+      margin-top: 80px;
+      padding: 40px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--secondary);
+    }
+
+    .link-portfolio {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      position: relative;
+    }
+    .link-portfolio::after {
+      content: '';
       position: absolute;
-      top: 0;
+      width: 100%;
+      height: 2px;
+      bottom: -2px;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://www.transparenttextures.com/patterns/asfalt.png');
-      animation: moveBackground 10s linear infinite;
-      z-index: -1;
+      background: var(--primary);
+      transform: scaleX(0);
+      transform-origin: bottom right;
+      transition: transform 0.3s ease-out;
     }
-    @keyframes moveBackground {
-      0% { background-position: 0 0; }
-      100% { background-position: 100% 0; }
+    .link-portfolio:hover::after {
+      transform: scaleX(1);
+      transform-origin: bottom left;
     }
-    /* New header image */
-    .header-image {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      height: auto;
-      opacity: 0.1; /* Slightly transparent */
-      z-index: -1; /* Behind the text */
+
+    /* Animation Utility */
+    .fade-in-up {
+      animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      opacity: 0;
+      transform: translateY(30px);
     }
+    
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+
   </style>
 </head>
 
 <body>
 
-  <div class="background-animation"></div>
-
-  <header class="hero fade-in">
-    <img src="https://miro.medium.com/v2/resize:fit:1400/1*fNYR_qApiq8wPbDxQvar2Q.png" alt="Header Background" class="header-image">
-    <h1>Integración de Formulario API</h1>
-    <p>API gratuita creada por <strong>NicaPages</strong> para enviar formularios directamente a tu correo, con soporte para archivos (.doc, .pdf, imágenes).</p>
-    <p><b>100 peticiones diarias</b> y <b>3000 al mes</b> — Ideal para formularios web simples y profesionales.</p>
+  <header class="hero fade-in-up">
+    <div class="container">
+      <span class="badge-dev"><i class="fas fa-code me-2"></i>Joshua Chávez Dev</span>
+      <h1>Integración de Formulario API</h1>
+      <p class="mt-3">Infraestructura backend gratuita y robusta para desarrolladores. Envía datos de formularios directamente a tu email con soporte para archivos adjuntos. Desarrollado por <strong>Joshua Chávez</strong>.</p>
+      
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <a href="#docs" class="btn-glow text-decoration-none">Ver Documentación</a>
+        <a href="#live-demo" class="btn btn-outline-light px-4 py-2 rounded-3">Live Demo</a>
+      </div>
+    </div>
   </header>
 
-  <section class="section fade-in">
-    <div class="container">
-      <h2 class="mb-4">🔗 Ruta POST de la API</h2>
-      <div class="code-box mb-4">
-        <button class="btn btn-primary" onclick="copyToClipboard('https://forms-nicpages.vercel.app/submit-form')">Copiar Ruta API</button>
-        <p class="mt-2">POST <span id="api-url">https://forms-nicpages.vercel.app/submit-form</span></p>
+  <div class="container pb-5" id="docs">
+    
+    <section class="mb-5 fade-in-up delay-100">
+      <div class="glass-panel p-4 p-md-5">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+          <h2 class="h4 mb-0 text-white"><i class="fas fa-network-wired text-primary me-2"></i>Endpoint Principal</h2>
+          <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25">POST Method</span>
+        </div>
+        
+        <p class="text-secondary">Envía tus peticiones a esta ruta utilizando cualquier tecnología que soporte HTTP POST (HTML, React, Vue, Node.js, etc).</p>
+
+        <div class="code-window">
+          <div class="window-header">
+            <div class="d-flex gap-2">
+              <div class="dot red"></div>
+              <div class="dot yellow"></div>
+              <div class="dot green"></div>
+            </div>
+            <div class="ms-auto">
+              <button class="btn-copy" onclick="copyToClipboard('https://forms-nicpages.vercel.app/submit-form')"><i class="far fa-copy"></i> Copiar URL</button>
+            </div>
+          </div>
+          <div class="code-content text-center">
+            <span class="kwd">https://forms-nicpages.vercel.app/submit-form</span>
+          </div>
+        </div>
       </div>
-      <p>Envía tus datos a esta ruta utilizando HTML, React, JavaScript o cualquier tecnología que soporte formularios POST.</p>
-    </div>
-  </section>
+    </section>
 
-  <section class="section fade-in">
-    <div class="container">
-      <h2 class="mb-4">📄 Variables obligatorias</h2>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item bg-transparent text-light">
-          <b>to</b>: Email destinatario (obligatorio)
-        </li>
-        <li class="list-group-item bg-transparent text-light">
-          <b>redirect_to</b>: URL a la que redirige después del envío (opcional)
-        </li>
-        <li class="list-group-item bg-transparent text-light">
-          <b>Otros campos</b>: Nombre, mensaje, teléfono, ciudad, etc.
-        </li>
-        <li class="list-group-item bg-transparent text-light">
-          <b>files</b>: Archivos adjuntos (opcional, .doc, .pdf, imágenes)
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="section fade-in">
-    <div class="container">
-      <h2 class="mb-4">📱 Ejemplo de Integración en React</h2>
-      <p>Para redirigir a tu correo, solo cambia el correo del formulario de ejemplo:</p>
-      <div class="code-box">
-        <pre>
-          <code>
-import React, { useState } from 'react';
-
-const FormularioAPI = () => {
-  const [formData, setFormData] = useState({
-    to: 'tucorreo@dominio.com', // Cambia esto por tu correo
-    name: '',
-    email: '',
-    message: '',
-    files: null,
-  });
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files : value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const form = new FormData();
-    for (const key in formData) {
-      form.append(key, formData[key]);
-    }
-
-    const response = await fetch('https://forms-nicpages.vercel.app/submit-form', {
-      method: 'POST',
-      body: form,
-    });
-
-    if (response.ok) {
-      alert('Formulario enviado con éxito');
-    } else {
-      alert('Error al enviar el formulario');
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} encType="multipart/form-data">
-      <input type="hidden" name="to" value={formData.to} />
-      <input type="text" name="name" placeholder="Nombre" onChange={handleChange} required />
-      <input type="email" name="email" placeholder="Correo" onChange={handleChange} required />
-      <textarea name="message" placeholder="Tu mensaje" onChange={handleChange}></textarea>
-      <input type="file" name="files" onChange={handleChange} multiple />
-      <button type="submit">Enviar</button>
-    </form>
-          </code>
-        </pre>
+    <section class="mb-5 fade-in-up delay-200">
+      <h2 class="h3 mb-4 ps-2 border-start border-4 border-info">Variables de Configuración</h2>
+      <div class="var-grid">
+        <div class="var-card">
+          <span class="var-name">to</span>
+          <span class="badge bg-danger mb-2">Obligatorio</span>
+          <p class="small text-secondary mb-0">El correo electrónico donde recibirás los datos del formulario.</p>
+        </div>
+        <div class="var-card">
+          <span class="var-name">redirect_to</span>
+          <span class="badge bg-primary mb-2">Opcional</span>
+          <p class="small text-secondary mb-0">URL absoluta (ej: https://tusitio.com/gracias) para redirigir al usuario tras el éxito.</p>
+        </div>
+        <div class="var-card">
+          <span class="var-name">files</span>
+          <span class="badge bg-primary mb-2">Opcional</span>
+          <p class="small text-secondary mb-0">Input tipo 'file' para adjuntar documentos (.pdf, .doc, imágenes). Soporta múltiples archivos.</p>
+        </div>
+        <div class="var-card">
+          <span class="var-name">Campos Libres</span>
+          <span class="badge bg-success mb-2">Dinámico</span>
+          <p class="small text-secondary mb-0">name, phone, city, message... Cualquier campo extra será incluido en el cuerpo del correo.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section fade-in">
-    <div class="container">
-      <h2 class="mb-4">💻 Ejemplo en HTML</h2>
-      <div class="code-box">
-        <button class="btn btn-primary" onclick="copyToClipboard('&lt;form action=&quot;https://forms-nicpages.vercel.app/submit-form&quot; method=&quot;POST&quot; enctype=&quot;multipart/form-data&quot;&gt;&lt;input type=&quot;hidden&quot; name=&quot;to&quot; value=&quot;tucorreo@dominio.com&quot;&gt;&lt;br/&gt;&lt;input type=&quot;text&quot; name=&quot;name&quot; placeholder=&quot;Nombre&quot;&gt;&lt;br/&gt;&lt;input type=&quot;email&quot; name=&quot;email&quot; placeholder=&quot;Correo&quot;&gt;&lt;br/&gt;&lt;textarea name=&quot;message&quot;&gt;&lt;/textarea&gt;&lt;br/&gt;&lt;input type=&quot;file&quot; name=&quot;files&quot; multiple&gt;&lt;br/&gt;&lt;button type=&quot;submit&quot;&gt;Enviar&lt;/button&gt;&lt;br/&gt;&lt;/form&gt;')">Copiar Código HTML</button>
-        <pre>
-          <code>
-&lt;form action="https://forms-nicpages.vercel.app/submit-form" method="POST" enctype="multipart/form-data"&gt;<br/>
-&nbsp;&nbsp;&lt;input type="hidden" name="to" value="tucorreo@dominio.com"&gt;<br/>
-&nbsp;&nbsp;&lt;input type="text" name="name" placeholder="Nombre"&gt;<br/>
-&nbsp;&nbsp;&lt;input type="email" name="email" placeholder="Correo"&gt;<br/>
-&nbsp;&nbsp;&lt;textarea name="message"&gt;&lt;/textarea&gt;<br/>
-&nbsp;&nbsp;&lt;input type="file" name="files" multiple&gt;<br/>
-&nbsp;&nbsp;&lt;button type="submit"&gt;Enviar&lt;/button&gt;<br/>
-&lt;/form&gt;
-          </code>
-        </pre>
+    <div class="row g-4 fade-in-up delay-300">
+      
+      <div class="col-lg-6">
+        <div class="glass-panel p-4 h-100">
+          <h3 class="h5 mb-3"><i class="fab fa-html5 me-2 text-warning"></i>HTML5 Nativo</h3>
+          <p class="small text-secondary">Integración directa sin JavaScript. Ideal para landing pages estáticas.</p>
+          
+          <div class="code-window">
+            <div class="window-header">
+              <span class="window-title">index.html</span>
+              <button class="btn-copy ms-auto" onclick="copyHTML()"><i class="far fa-copy"></i></button>
+            </div>
+            <div class="code-content">
+              &lt;<span class="tag">form</span> <span class="attr">action</span>=<span class="str">"..."</span> <span class="attr">method</span>=<span class="str">"POST"</span> <span class="attr">enctype</span>=<span class="str">"multipart/form-data"</span>&gt;<br>
+              &nbsp;&nbsp;&lt;<span class="tag">input</span> <span class="attr">type</span>=<span class="str">"hidden"</span> <span class="attr">name</span>=<span class="str">"to"</span> <span class="attr">value</span>=<span class="str">"tu@email.com"</span>&gt;<br>
+              &nbsp;&nbsp;&lt;<span class="tag">input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">name</span>=<span class="str">"nombre"</span>&gt;<br>
+              &nbsp;&nbsp;&lt;<span class="tag">button</span> <span class="attr">type</span>=<span class="str">"submit"</span>&gt;Enviar&lt;/<span class="tag">button</span>&gt;<br>
+              &lt;/<span class="tag">form</span>&gt;
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
 
-  <section class="section fade-in">
-    <div class="container">
-      <h2 class="mb-4">🚀 Consola Interactiva en Vivo</h2>
-      <div class="codepen-simulator">
-        <div class="editor">
-          <div class="editor-header">Editor HTML</div>
-          <textarea id="code" rows="15">
-<form action="https://forms-nicpages.vercel.app/submit-form" method="POST" enctype="multipart/form-data">
-  <input type="hidden" name="to" value="tucorreo@dominio.com">
-  <input type="text" name="name" placeholder="Nombre" required>
-  <input type="email" name="email" placeholder="Correo" required>
-  <textarea name="message" placeholder="Tu mensaje"></textarea>
-  <input type="file" name="files" multiple>
-  <button type="submit">Enviar</button>
-</form>
+      <div class="col-lg-6">
+        <div class="glass-panel p-4 h-100">
+          <h3 class="h5 mb-3"><i class="fab fa-react me-2 text-info"></i>React / Next.js</h3>
+          <p class="small text-secondary">Ejemplo asíncrono utilizando Fetch API y FormData.</p>
+          
+          <div class="code-window">
+            <div class="window-header">
+              <span class="window-title">ContactForm.jsx</span>
+            </div>
+            <div class="code-content">
+              <span class="kwd">const</span> handleSubmit = <span class="kwd">async</span> (e) => {<br>
+              &nbsp;&nbsp;e.preventDefault();<br>
+              &nbsp;&nbsp;<span class="kwd">const</span> formData = <span class="kwd">new</span> FormData(e.target);<br>
+              &nbsp;&nbsp;formData.append(<span class="str">'to'</span>, <span class="str">'tu@email.com'</span>);<br><br>
+              &nbsp;&nbsp;<span class="kwd">await</span> fetch(<span class="str">'https://...'</span>, {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;method: <span class="str">'POST'</span>,<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;body: formData<br>
+              &nbsp;&nbsp;});<br>
+              };
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <section class="mt-5 pt-5 fade-in-up delay-300" id="live-demo">
+      <div class="text-center mb-4">
+        <h2 class="h2">Playground Interactivo</h2>
+        <p class="text-secondary">Edita el código a la izquierda y prueba el formulario en tiempo real a la derecha.</p>
+      </div>
+
+      <div class="editor-container shadow-lg">
+        <div class="editor-pane">
+          <div class="pane-header">
+            <span><i class="fas fa-code text-primary me-2"></i>Source Code</span>
+          </div>
+          <textarea id="code" spellcheck="false">
+<div style="padding: 20px; font-family: sans-serif;">
+  <h3 style="color:#333">Contáctame</h3>
+  <form action="https://forms-nicpages.vercel.app/submit-form" method="POST" enctype="multipart/form-data">
+    
+    <input type="hidden" name="to" value="tucorreo@dominio.com">
+    
+    <div style="margin-bottom:10px;">
+      <label>Nombre:</label><br>
+      <input type="text" name="name" placeholder="Tu nombre" style="width:100%; padding:8px;" required>
+    </div>
+
+    <div style="margin-bottom:10px;">
+      <label>Email:</label><br>
+      <input type="email" name="email" placeholder="tucorreo@gmail.com" style="width:100%; padding:8px;" required>
+    </div>
+
+    <div style="margin-bottom:10px;">
+      <label>Mensaje:</label><br>
+      <textarea name="message" rows="3" style="width:100%; padding:8px;"></textarea>
+    </div>
+
+    <div style="margin-bottom:15px;">
+      <label>Adjuntar archivo:</label><br>
+      <input type="file" name="files" multiple>
+    </div>
+
+    <button type="submit" style="background:#007bff; color:white; border:none; padding:10px 20px; cursor:pointer; border-radius:4px;">
+      Enviar Mensaje
+    </button>
+
+  </form>
+</div>
           </textarea>
         </div>
-        <div class="preview">
-          <div class="preview-header">Vista previa</div>
+        <div class="preview-pane">
+          <div class="pane-header">
+            <span><i class="fas fa-eye text-success me-2"></i>Vista Previa</span>
+            <small class="text-secondary">Renderizado en tiempo real</small>
+          </div>
           <iframe id="preview"></iframe>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+  </div>
 
   <footer>
-    <p>© 2025 Desarrollado por <a href="https://nicapages.site" class="text-info">NicaPages</a> — Todos los derechos reservados</p>
+    <div class="container">
+      <p class="mb-2">Desarrollado con arquitectura escalable por</p>
+      <a href="#" class="link-portfolio text-uppercase h5">Joshua Chávez Full Stack</a>
+      <p class="small mt-3 opacity-50">© 2025 Todos los derechos reservados.</p>
+    </div>
   </footer>
 
-<script>
-  const textarea = document.getElementById('code');
-  const preview = document.getElementById('preview');
+  <script>
+    const textarea = document.getElementById('code');
+    const preview = document.getElementById('preview');
 
-  function updatePreview() {
-    const content = textarea.value;
-    preview.srcdoc = content;
-  }
+    function updatePreview() {
+      const content = textarea.value;
+      preview.srcdoc = content;
+    }
 
-  function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('Texto copiado al portapapeles');
-    }, (err) => {
-      console.error('Error al copiar: ', err);
-    });
-  }
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('¡URL copiada al portapapeles!');
+      }, (err) => {
+        console.error('Error: ', err);
+      });
+    }
 
-  textarea.addEventListener('input', updatePreview);
-  window.addEventListener('DOMContentLoaded', updatePreview);
-</script>
+    function copyHTML() {
+      const code = `<form action="https://forms-nicpages.vercel.app/submit-form" method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="to" value="tucorreo@dominio.com">
+  <input type="text" name="name" placeholder="Nombre">
+  <input type="email" name="email" placeholder="Correo">
+  <textarea name="message"></textarea>
+  <input type="file" name="files" multiple>
+  <button type="submit">Enviar</button>
+</form>`;
+      copyToClipboard(code);
+    }
+
+    textarea.addEventListener('input', updatePreview);
+    window.addEventListener('DOMContentLoaded', updatePreview);
+  </script>
 
 </body>
 </html>
