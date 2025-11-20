@@ -3,194 +3,261 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Form API Docs | Joshua Chávez</title>
+  <title>API Ecosystem | Joshua Chávez</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     :root {
-      /* Paleta Slate (Profesional, no negro puro) */
-      --bg-main: #0f172a;      /* Slate 900 */
-      --bg-surface: #1e293b;   /* Slate 800 */
-      --bg-highlight: #334155; /* Slate 700 */
-      
-      --primary: #38bdf8;      /* Sky Blue */
-      --secondary: #94a3b8;    /* Slate 400 */
-      --text-main: #f1f5f9;    /* Slate 100 */
-      
-      --border: rgba(148, 163, 184, 0.15);
-      --gradient-hero: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      --bg-core: #020617;
+      --card-bg: rgba(15, 23, 42, 0.6);
+      --primary: #0ea5e9; /* Sky 500 */
+      --accent: #6366f1;  /* Indigo 500 */
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --glow: rgba(56, 189, 248, 0.2);
     }
 
     body {
-      background-color: var(--bg-main);
+      background-color: var(--bg-core);
       color: var(--text-main);
       font-family: 'Inter', sans-serif;
-      line-height: 1.6;
       overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
     }
 
-    /* --- Typography & Utils --- */
-    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.025em; }
+    /* --- ANIMATED BACKGROUND SYSTEM --- */
+    .background-system {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .grid-overlay {
+      position: absolute;
+      width: 100%; height: 100%;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+      -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: floatBlob 10s infinite alternate ease-in-out;
+    }
+    .blob-1 { width: 400px; height: 400px; background: var(--primary); top: -100px; left: -100px; }
+    .blob-2 { width: 500px; height: 500px; background: var(--accent); bottom: -150px; right: -100px; animation-delay: -5s; }
+
+    @keyframes floatBlob {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50px, 50px) scale(1.1); }
+    }
+
+    /* --- TYPOGRAPHY & UTILS --- */
+    h1, h2, h3 { letter-spacing: -0.03em; font-weight: 800; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    
     .text-gradient {
-      background: var(--gradient-hero);
+      background: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
-    
-    /* --- Animations --- */
-    .fade-in { animation: fadeIn 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    
-    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
 
-    /* --- Navbar --- */
-    .nav-brand {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: white;
+    .btn-glass {
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border);
+      color: white;
       padding: 8px 16px;
-      border-radius: 50px;
-      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      transition: 0.3s;
+      font-size: 0.9rem;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-glass:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary);
+      color: white;
+      transform: translateY(-2px);
     }
 
-    /* --- Tech Stack Cards --- */
-    .tech-card {
-      background: var(--bg-surface);
+    /* --- CARDS (Bento Box Style) --- */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 24px;
       height: 100%;
-      transition: 0.3s;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s;
       position: relative;
       overflow: hidden;
     }
-    .tech-card:hover {
-      border-color: var(--primary);
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      opacity: 0;
+      transition: opacity 0.3s;
     }
-    .tech-icon {
+    .glass-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(56, 189, 248, 0.3);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+    }
+    .glass-card:hover::before { opacity: 1; }
+
+    .icon-box {
       width: 48px; height: 48px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(56, 189, 248, 0.1);
-      border-radius: 10px;
-      color: var(--primary);
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       margin-bottom: 16px;
+      color: var(--text-main);
     }
 
-    /* --- Code Block --- */
-    .code-container {
-      background: #0b1120; /* Darker for code contrast */
-      border: 1px solid var(--border);
+    /* --- CODE EDITOR --- */
+    .ide-wrapper {
+      background: #0f1117; /* Deep IDE black */
       border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       overflow: hidden;
     }
-    .code-header {
-      background: rgba(255,255,255,0.03);
-      padding: 12px 20px;
+    .ide-header {
+      background: #161b22;
+      padding: 10px 20px;
       display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid #30363d;
     }
-    .code-body {
-      padding: 24px;
+    .dot-group { display: flex; gap: 6px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #333; }
+    .dot.r { background: #ff5f56; }
+    .dot.y { background: #ffbd2e; }
+    .dot.g { background: #27c93f; }
+
+    .ide-body {
+      padding: 20px;
       overflow-x: auto;
-      font-size: 0.9rem;
-      color: #e2e8f0;
+      color: #e6edf3;
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+    
+    /* Syntax Highlighting */
+    .c-key { color: #ff7b72; } /* Red/Pink */
+    .c-func { color: #d2a8ff; } /* Purple */
+    .c-str { color: #a5d6ff; } /* Light Blue */
+    .c-var { color: #79c0ff; } /* Blue */
+    .c-com { color: #8b949e; font-style: italic; } /* Grey */
+
+    /* --- ANIMATIONS --- */
+    .animate-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Syntax Highlighting Simulation */
-    .kwd { color: #c084fc; } /* Purple */
-    .str { color: #4ade80; } /* Green */
-    .func { color: #60a5fa; } /* Blue */
-    .com { color: #64748b; } /* Grey Comment */
+    /* Footer */
+    footer { border-top: 1px solid var(--border); margin-top: 80px; padding: 40px 0; }
 
-    /* --- Endpoint Box --- */
-    .endpoint-box {
-      background: rgba(56, 189, 248, 0.05);
-      border: 1px solid rgba(56, 189, 248, 0.2);
-      border-radius: 8px;
-      padding: 12px 20px;
-      display: flex; align-items: center; gap: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-    }
-    .method-badge {
-      background: var(--primary); color: #0f172a;
-      padding: 4px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem;
-    }
-
-    /* --- Footer --- */
-    footer {
-      border-top: 1px solid var(--border);
-      margin-top: 80px; padding: 40px 0;
-      text-align: center; color: var(--secondary);
-    }
   </style>
 </head>
 
 <body>
 
-  <nav class="pt-4 pb-5 text-center fade-in">
-    <span class="nav-brand">
-      <i class="fas fa-code-branch me-2 text-primary"></i>Joshua Chávez API
-    </span>
+  <div class="background-system">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <nav class="container py-4 d-flex justify-content-between align-items-center animate-up">
+    <div class="d-flex align-items-center gap-2">
+      <div class="bg-white rounded-circle d-flex align-items-center justify-content-center" style="width:32px; height:32px;">
+        <i class="fas fa-code text-dark small"></i>
+      </div>
+      <span class="fw-bold tracking-tight">Joshua Chávez <span class="text-muted fw-normal">| API</span></span>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+      <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill">
+        <i class="fas fa-circle fa-xs me-2"></i>System Operational
+      </span>
+    </div>
   </nav>
 
-  <header class="container text-center mb-5 fade-in">
-    <h1 class="display-4 mb-3">Infraestructura de Formularios <br> <span class="text-gradient">Segura & Anónima</span></h1>
-    <p class="text-secondary fs-5 mx-auto" style="max-width: 700px;">
-      API Backend desarrollada con <strong>Python & FastAPI</strong>. 
-      Procesa datos de manera encriptada y los entrega vía SMTP seguro a través de subdominios verificados.
+  <header class="container text-center py-5 mt-3 animate-up">
+    <div class="d-inline-block mb-3 px-3 py-1 rounded-pill border border-secondary border-opacity-25 bg-secondary bg-opacity-10 text-info small fw-bold">
+      v2.0 Released: Python Engine
+    </div>
+    <h1 class="display-3 mb-4">
+      Infraestructura de Formularios <br>
+      <span class="text-gradient">Invisible, Segura & Escalable</span>
+    </h1>
+    <p class="lead text-muted mx-auto mb-5" style="max-width: 650px;">
+      API Backend impulsada por <strong>FastAPI & Python</strong>. Encriptación de grado militar, enrutamiento anónimo y entrega garantizada vía <strong>Resend</strong>.
     </p>
+    
+    <div class="d-flex justify-content-center gap-3">
+      <a href="#integration" class="btn btn-light px-4 py-2 rounded-3 fw-bold">
+        <i class="fas fa-plug me-2"></i>Integrar Ahora
+      </a>
+      <a href="#" onclick="copyEndpoint()" class="btn-glass">
+        <span class="font-mono small text-muted">POST /submit-form</span>
+        <i class="far fa-copy ms-2 text-white"></i>
+      </a>
+    </div>
   </header>
 
-  <section class="container mb-5 fade-in delay-1">
+  <section class="container mb-5">
     <div class="row g-4">
       
-      <div class="col-md-6 col-lg-3">
-        <div class="tech-card">
-          <div class="tech-icon"><i class="fab fa-python"></i></div>
-          <h4 class="h6">Core: Python + FastAPI</h4>
-          <p class="small text-secondary mb-0">
-            Arquitectura asíncrona de alto rendimiento. Validación estricta de tipos con Pydantic para asegurar la integridad de los datos.
+      <div class="col-md-6 col-lg-4 animate-up delay-100">
+        <div class="glass-card">
+          <div class="icon-box text-warning"><i class="fab fa-python"></i></div>
+          <h5>Python & FastAPI Engine</h5>
+          <p class="text-muted small mb-0">
+            Procesamiento asíncrono de alto rendimiento. Validación de esquemas con Pydantic para asegurar que solo datos limpios lleguen a tu sistema.
           </p>
         </div>
       </div>
 
-      <div class="col-md-6 col-lg-3">
-        <div class="tech-card">
-          <div class="tech-icon"><i class="fas fa-paper-plane"></i></div>
-          <h4 class="h6">Motor: Resend</h4>
-          <p class="small text-secondary mb-0">
-            Integración directa con la API de Resend. Garantiza una entregabilidad del 99.9% evitando la carpeta de SPAM.
+      <div class="col-md-6 col-lg-4 animate-up delay-200">
+        <div class="glass-card">
+          <div class="icon-box text-info"><i class="fas fa-shield-alt"></i></div>
+          <h5>Túnel de Privacidad</h5>
+          <p class="text-muted small mb-0">
+            El sistema actúa como un "Relay Ciego". Los datos se encriptan en tránsito (TLS 1.3), se procesan en memoria y se eliminan tras el envío.
           </p>
         </div>
       </div>
 
-      <div class="col-md-6 col-lg-3">
-        <div class="tech-card">
-          <div class="tech-icon"><i class="fas fa-user-secret"></i></div>
-          <h4 class="h6">Privacidad & Anonimato</h4>
-          <p class="small text-secondary mb-0">
-            Tus datos viajan encriptados. El sistema actúa como un "túnel ciego": recibe, procesa y olvida. No almacenamos logs.
-          </p>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-3">
-        <div class="tech-card">
-          <div class="tech-icon"><i class="fas fa-globe-americas"></i></div>
-          <h4 class="h6">Enrutamiento Verificado</h4>
-          <p class="small text-secondary mb-0">
-            Uso de subdominio dedicado en Resend. Autenticación DKIM/SPF para firmar digitalmente cada envío.
+      <div class="col-md-12 col-lg-4 animate-up delay-300">
+        <div class="glass-card d-flex flex-column justify-content-center">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="icon-box text-white mb-0"><i class="fas fa-paper-plane"></i></div>
+            <h5 class="mb-0">Powered by Resend</h5>
+          </div>
+          <p class="text-muted small">
+            Integración nativa con la infraestructura de Resend. Utilizamos subdominios verificados (SPF/DKIM) para garantizar una reputación de IP impecable y evitar el SPAM.
           </p>
         </div>
       </div>
@@ -198,152 +265,120 @@
     </div>
   </section>
 
-  <div class="container pb-5 fade-in delay-2">
-    
-    <div class="row g-5">
+  <section id="integration" class="container py-5 animate-up delay-200">
+    <div class="row align-items-center g-5">
+      
       <div class="col-lg-5">
-        <h3 class="mb-4">Guía de Integración</h3>
-        
-        <div class="mb-4">
-          <label class="text-secondary small text-uppercase fw-bold mb-2">Endpoint Público</label>
-          <div class="endpoint-box">
-            <span class="method-badge">POST</span>
-            <span style="word-break: break-all;">https://forms-nicpages.vercel.app/submit-form</span>
-            <button class="btn btn-sm btn-link text-white ms-auto" onclick="copyEndpoint()"><i class="far fa-copy"></i></button>
+        <h2 class="mb-4">Integración en <span class="text-info">30 segundos</span></h2>
+        <p class="text-muted mb-4">
+          No necesitas librerías externas. Usa el estándar <code>fetch</code> de JavaScript o un formulario HTML nativo. La API detecta automáticamente el <code>Content-Type</code>.
+        </p>
+
+        <div class="d-flex flex-column gap-3">
+          <div class="d-flex align-items-start gap-3">
+            <i class="fas fa-check-circle text-success mt-1"></i>
+            <div>
+              <strong>Endpoint Universal</strong>
+              <p class="small text-muted m-0">https://forms-nicpages.vercel.app/submit-form</p>
+            </div>
+          </div>
+          <div class="d-flex align-items-start gap-3">
+            <i class="fas fa-check-circle text-success mt-1"></i>
+            <div>
+              <strong>Soporte Binario</strong>
+              <p class="small text-muted m-0">Sube imágenes y documentos usando <code>multipart/form-data</code>.</p>
+            </div>
+          </div>
+          <div class="d-flex align-items-start gap-3">
+            <i class="fas fa-check-circle text-success mt-1"></i>
+            <div>
+              <strong>Redirección Inteligente</strong>
+              <p class="small text-muted m-0">Controla a dónde va el usuario después de enviar con el campo <code>redirect_to</code>.</p>
+            </div>
           </div>
         </div>
-
-        <h5 class="h6 mt-4 text-white">Parámetros (FormData)</h5>
-        <ul class="list-group list-group-flush bg-transparent">
-          <li class="list-group-item bg-transparent text-secondary px-0 border-secondary border-opacity-25">
-            <code class="text-primary">to</code> <span class="badge bg-light text-dark ms-2">Requerido</span>
-            <div class="small mt-1">Email destino. Debe ser un correo válido.</div>
-          </li>
-          <li class="list-group-item bg-transparent text-secondary px-0 border-secondary border-opacity-25">
-            <code class="text-primary">redirect_to</code> <span class="badge bg-secondary bg-opacity-25 text-light ms-2">Opcional</span>
-            <div class="small mt-1">URL absoluta para redirigir al usuario tras el envío.</div>
-          </li>
-          <li class="list-group-item bg-transparent text-secondary px-0 border-secondary border-opacity-25">
-            <code class="text-primary">files</code> <span class="badge bg-secondary bg-opacity-25 text-light ms-2">Binario</span>
-            <div class="small mt-1">Soporte para adjuntos (imágenes, pdf, doc).</div>
-          </li>
-        </ul>
       </div>
 
       <div class="col-lg-7">
-        <div class="d-flex justify-content-between align-items-end mb-3">
-          <h3 class="m-0">Ejemplo React + Vite</h3>
-          <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">Recomendado</span>
-        </div>
-
-        <div class="code-container shadow-lg">
-          <div class="code-header">
-            <small class="text-secondary font-mono">src/components/ContactForm.jsx</small>
-            <button class="btn btn-sm btn-outline-secondary" style="font-size: 0.75rem;" onclick="copyCode()">Copiar Código</button>
+        <div class="ide-wrapper">
+          <div class="ide-header">
+            <div class="dot-group">
+              <div class="dot r"></div>
+              <div class="dot y"></div>
+              <div class="dot g"></div>
+            </div>
+            <span class="text-muted small font-mono">src/hooks/useForm.js</span>
+            <button class="btn btn-sm btn-dark border border-secondary border-opacity-25 text-muted py-0" onclick="copyCode()">Copy</button>
           </div>
-          <pre class="code-body font-mono m-0">
-<span class="kwd">import</span> React, { useState } <span class="kwd">from</span> <span class="str">'react'</span>;
-<span class="kwd">import</span> { motion } <span class="kwd">from</span> <span class="str">'framer-motion'</span>;
+          <pre class="ide-body font-mono m-0">
+<span class="c-key">const</span> <span class="c-func">submitData</span> = <span class="c-key">async</span> (<span class="c-var">event</span>) => {
+  <span class="c-var">event</span>.<span class="c-func">preventDefault</span>();
 
-<span class="kwd">const</span> Contact = () => {
-  <span class="kwd">const</span> [formData, setFormData] = <span class="func">useState</span>({
-    name: <span class="str">''</span>, email: <span class="str">''</span>, message: <span class="str">''</span>, file: <span class="kwd">null</span>,
-    <span class="com">// Configuración del API</span>
-    to: <span class="str">'joshua44benja@gmail.com'</span>,  <span class="com">// Cambia este correo por el tuyo</span>
-    redirect_to: <span class="str">'https://misitio.com/gracias'</span> 
-  });
+  <span class="c-com">// 1. Preparar el Payload Seguro</span>
+  <span class="c-key">const</span> <span class="c-var">formData</span> = <span class="c-key">new</span> <span class="c-func">FormData</span>(<span class="c-var">event</span>.target);
+  
+  <span class="c-com">// Configuración Requerida</span>
+  <span class="c-var">formData</span>.<span class="c-func">append</span>(<span class="c-str">'to'</span>, <span class="c-str">'joshua44benja@gmail.com'</span>); <span class="c-com">// &lt;-- Tu Email</span>
 
-  <span class="kwd">const</span> <span class="func">handleSubmit</span> = <span class="kwd">async</span> (e) => {
-    e.preventDefault();
-    
-    <span class="kwd">const</span> payload = <span class="kwd">new</span> FormData();
-    <span class="com">// Append dinámico de datos</span>
-    Object.keys(formData).forEach(key => {
-       payload.append(key, formData[key]);
+  <span class="c-key">try</span> {
+    <span class="c-com">// 2. Envío a la API Python/FastAPI</span>
+    <span class="c-key">const</span> <span class="c-var">response</span> = <span class="c-key">await</span> <span class="c-func">fetch</span>(<span class="c-str">'https://forms-nicpages.vercel.app/submit-form'</span>, {
+      method: <span class="c-str">'POST'</span>,
+      body: <span class="c-var">formData</span> <span class="c-com">// El navegador maneja los headers y boundary</span>
     });
 
-    <span class="com">// Envío seguro a través de la API Python/FastAPI</span>
-    <span class="kwd">await</span> <span class="func">fetch</span>(<span class="str">'https://forms-nicpages.vercel.app/submit-form'</span>, {
-      method: <span class="str">'POST'</span>,
-      body: payload,
-    });
-    
-    alert(<span class="str">'¡Enviado y encriptado!'</span>);
-  };
-
-  <span class="kwd">return</span> (
-    &lt;<span class="kwd">form</span> onSubmit={handleSubmit}&gt;
-      {/* Tus inputs aquí */}
-    &lt;/<span class="kwd">form</span>&gt;
-  );
+    <span class="c-key">if</span> (<span class="c-var">response</span>.ok) {
+       <span class="c-func">alert</span>(<span class="c-str">'¡Datos encriptados y enviados!'</span>);
+    }
+  } <span class="c-key">catch</span> (<span class="c-var">error</span>) {
+    console.<span class="c-func">error</span>(<span class="c-str">'Error en el túnel:'</span>, <span class="c-var">error</span>);
+  }
 };</pre>
         </div>
-        <p class="text-center mt-3 small text-secondary">
-          <i class="fas fa-info-circle me-1"></i> Este código utiliza <code>FormData</code> nativo para manejar archivos binarios correctamente.
-        </p>
       </div>
+
     </div>
+  </section>
 
-  </div>
-
-  <footer>
+  <footer class="text-center animate-up delay-300">
     <div class="container">
-      <p class="fw-bold text-white mb-1">Joshua Chávez <span class="text-primary">Full Stack Developer</span></p>
-      <p class="small text-secondary mb-0">Arquitectura Backend Segura • Nicaragua 2025</p>
+      <p class="mb-1 fw-bold text-white">Joshua Chávez</p>
+      <p class="small text-muted">Full Stack Developer • Arquitectura Backend Segura</p>
+      <div class="d-flex justify-content-center gap-3 mt-3 opacity-50">
+        <i class="fab fa-python"></i>
+        <i class="fab fa-react"></i>
+        <i class="fas fa-database"></i>
+        <i class="fas fa-server"></i>
+      </div>
     </div>
   </footer>
 
   <script>
     function copyEndpoint() {
       navigator.clipboard.writeText('https://forms-nicpages.vercel.app/submit-form');
-      alert('Endpoint copiado al portapapeles');
+      const btn = document.querySelector('.btn-glass');
+      btn.style.borderColor = '#22c55e';
+      setTimeout(() => { btn.style.borderColor = 'rgba(255,255,255,0.08)'; }, 1000);
     }
 
     function copyCode() {
-      const code = `import React, { useState } from 'react';
+      const code = `const submitData = async (event) => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  formData.append('to', 'tu_email@gmail.com');
 
-const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '', email: '', message: '', file: null,
-    to: 'tu_email@gmail.com',
-    redirect_to: 'https://tusitio.com/gracias' 
-  });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const payload = new FormData();
-    
-    // Append manual o dinámico
-    payload.append('name', formData.name);
-    payload.append('email', formData.email);
-    payload.append('message', formData.message);
-    payload.append('to', formData.to);
-    if(formData.file) payload.append('files', formData.file);
-
-    try {
-      await fetch('https://forms-nicpages.vercel.app/submit-form', {
-        method: 'POST',
-        body: payload,
-      });
-      alert('Mensaje enviado con éxito');
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="Nombre" required />
-      <input type="email" onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="Email" required />
-      <textarea onChange={(e) => setFormData({...formData, message: e.target.value})} placeholder="Mensaje"></textarea>
-      <input type="file" onChange={(e) => setFormData({...formData, file: e.target.files[0]})} />
-      <button type="submit">Enviar</button>
-    </form>
-  );
-};
-export default Contact;`;
+  try {
+    const response = await fetch('https://forms-nicpages.vercel.app/submit-form', {
+      method: 'POST',
+      body: formData
+    });
+    if (response.ok) alert('Enviado');
+  } catch (error) {
+    console.error(error);
+  }
+};`;
       navigator.clipboard.writeText(code);
-      alert('Código React copiado al portapapeles');
+      alert('Snippet copiado');
     }
   </script>
 
